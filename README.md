@@ -125,4 +125,4 @@ terraform-vpc-remote-backend/
 
 **Annu Lohan**  
 DevOps Enthusiast | Practical Learner | Automation Lover  
-🔗 [LinkedIn](https://www.linkedin.com/in/annulohan) | 🛠️ [More Projects](https://github.com/AnnuRLohan)
+🔗 [LinkedIn](https://www.linkedin.com/in/annu-rani-lohan-069146ba/) | 🛠️ [More Projects](https://github.com/AnnuRLohan)
