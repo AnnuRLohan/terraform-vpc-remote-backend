@@ -1,3 +1,14 @@
+terraform {
+    backend "s3" {
+        bucket         = "terraform-state-annu" # S3 bucket name
+        key            = "vpc-ec2/terraform.tfstate" # File path inside the bucket
+        region         = "us-east-1"
+        dynamodb_table = "terraform-locks"
+        encrypt        = true
+    }
+}
+
+
 provider "aws" {
     region = var.aws_region
 }
