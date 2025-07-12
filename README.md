@@ -1,47 +1,44 @@
-# Terraform AWS VPC with EC2 Deployment
+# Terraform AWS VPC with Remote Backend (S3 + DynamoDB)
 
-## 📌 Overview
+## 🧾 Overview
 
-This project provisions a complete networking setup on AWS using Terraform. It includes:
-- A custom Virtual Private Cloud (VPC)
-- A public subnet
-- An Internet Gateway (IGW)
-- A Route Table
-- A Security Group to allow SSH access
-- An EC2 instance deployed inside the public subnet with SSH key pair access
+This project provisions a custom AWS VPC with a public subnet and an EC2 instance using Terraform.  
+It also uses a **remote backend** (S3) and **state locking** (DynamoDB) to manage the Terraform state securely and support team workflows.
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠️ Tools & Services Used
 
 - Terraform
-- AWS CLI
-- AWS VPC, EC2, Subnets, Route Tables, Internet Gateway
-- SSH + Key Pairs + Security Groups
+- AWS S3 (remote state backend)
+- AWS DynamoDB (state locking)
+- AWS EC2, VPC, Subnet, Internet Gateway, Route Table
+- SSH Key Pair
 
 ---
 
-## 🧱 Infrastructure Architecture
+## 🧱 Architecture
 
 - **VPC**: 10.0.0.0/16
-- **Subnet**: 10.0.1.0/24 (Public)
-- **IGW**: Enables internet access
-- **Route Table**: Directs traffic to the IGW
-- **EC2 Instance**: Amazon Linux 2 (AMI ID: `ami-05ffe3c48a9991133`)
-- **Security Group**: Allows inbound SSH (port 22)
-- **Key Pair**: `terraform-key.pem` (created manually in AWS)
+- **Public Subnet**: 10.0.1.0/24
+- **Internet Gateway + Route Table**: Enables internet access
+- **Security Group**: Allows SSH access (port 22)
+- **EC2 Instance**: Amazon Linux 2
+- **Remote Backend**:
+  - `terraform-state-annu` (S3 bucket)
+  - `terraform-locks` (DynamoDB table)
 
 ---
 
-## 🚀 How to Use
+## 🔐 Terraform Backend Configuration
 
-### 1. Prerequisites
-- Terraform installed
-- AWS CLI configured
-- Valid AWS key pair created and downloaded
-
-### 2. Clone the Repository
-
-```bash
-git clone https://github.com/AnnuRLohan/terraform-aws-vpc-ec2.git
-cd terraform-aws-vpc-ec2
+```hcl
+terraform {
+  backend "s3" {
+    bucket         = "terraform-state-annu"
+    key            = "vpc-ec2/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+  }
+}
